@@ -23,14 +23,11 @@ class Model:
 	'''
 	def getRingDistribution(self):
 		ringDistribution = [(1 - self.iprobs[0])] # at i = 1, probability of stopping is 1-p2
-												  # (and p2 should be the first thing in iprobs)
 		runningProbability = self.iprobs[0] # just decided to ring twice
 		for i in xrange(1, 9):
 			ringDistribution.append(runningProbability*(1 - self.iprobs[i])) # probability we stop here is added
 			runningProbability *= self.iprobs[i] # decided to ring again
-		ringDistribution.append(runningProbability) # at this point, runningProbability is the
-													# product of all probabilities in iprobs, which
-													# just so happens to be the probability that we ring 10 times
+		ringDistribution.append(runningProbability) # runningProbability now = product of all probabilities in iprobs = the probability that we ring 10 times
 		return ringDistribution
 
 	'''
@@ -55,8 +52,7 @@ class Model:
 					totalEarnings += possibleEarnings # decided to stop on our own, so we win what we currently have
 					earningsDict[possibleEarnings] += 1
 					break
-				if Z > p + 2: # i.e. say p = 0, it means we just decided above to ring twice
-							  # (iprobs starts with p2). so Z must be 3 or more to continue
+				if Z > p + 2: # say p = 0, that means we just decided above to ring twice. So Z must be 3 or more to continue
 					if millionaire:
 						possibleEarnings += 100*(p + 2) # millionaire adds 100*current ring amount
 					else:
@@ -115,7 +111,7 @@ print results2Mill
 results2Bill = M2.runNTimes(n, False)
 print results2Bill
 
-# Model 3 (Not in report) - Ring 7 times (the "correct" strategy for the millionaire game)
+# Model 3 - Ring 7 times (the "correct" strategy for the millionaire game)
 
 M3 = Model([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0, 0, 0])
 
@@ -230,6 +226,7 @@ print results8Bill
 
 i_values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+# plot probability distributions for the millionaire's game
 plt.figure()
 plt.plot(i_values, dist0, 'y--', label = 'probability distribution of M0 (Ring 10 Times)')
 plt.plot(i_values, dist1, 'm--', label = 'probability distribution of M1 (Fair Coin Flip)')
@@ -244,7 +241,7 @@ plt.title('Probability Distributions for the Millionaire Game Compared With Dist
 plt.legend(loc = 'upper left')
 plt.show()
 
-
+# plot probability distributions for the billionaire's game
 plt.figure()
 plt.plot(i_values, dist0, 'y--', label = 'probability distribution of M0 (Ring 10 Times)')
 plt.plot(i_values, dist1, 'm--', label = 'probability distribution of M1 (Fair Coin Flip)')
@@ -259,8 +256,10 @@ plt.legend(loc = 'upper left')
 plt.show()
 
 objects = ["Ring 10 Times", "Flip A Coin", "Conditional", "Ring 7 Times", "High Risk", "Conservative Risk", "Billionaire Model", "Millionaire Response", "Billionaire Response"]
+
 yMill = [results0Mill[0], results1Mill[0], results2Mill[0], results3Mill[0], results4Mill[0], results5Mill[0], results6Mill[0], results7Mill[0], results8Mill[0]]
 
+# plot results of simulating the millionaire's game 100000 times for every model
 plt.figure()
 plt.bar(range(9), yMill, align='center')
 plt.xlabel('Model')
@@ -271,6 +270,7 @@ plt.show()
 
 yBill = [results0Bill[0], results1Bill[0], results2Bill[0], results3Bill[0], results4Bill[0], results5Bill[0], results6Bill[0], results7Bill[0], results8Bill[0]]
 
+# plot results of simulating the billionaire's game 100000 times for every model
 plt.figure()
 plt.bar(range(9), yBill, align='center')
 plt.xlabel('Model')
